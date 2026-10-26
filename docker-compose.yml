@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: athena-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: library_management
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: athena-library-app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/library_management
+      - JWT_SECRET=production_super_secure_jwt_secret_key_minimum_32_characters_12345
+      - JWT_EXPIRE=24h
+      - BORROW_PERIOD_DAYS=14
+      - FINE_RATE_PER_DAY=1.00
+      - MAX_FINE_AMOUNT=50.00
+      - MAX_RENEWALS=2
+      - DEFAULT_MEMBER_BORROWING_LIMIT=5
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:

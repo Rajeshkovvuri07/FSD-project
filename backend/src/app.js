@@ -22,6 +22,8 @@ const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 
+app.set('trust proxy',1);
+
 // 1. Security Headers via Helmet
 app.use(
   helmet({

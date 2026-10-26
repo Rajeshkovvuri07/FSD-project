@@ -82,16 +82,6 @@ const seedData = async (isStandalone = true) => {
       address: '221B Baker Street',
       borrowingLimit: 5
     });
-      name: 'Bob Smith',
-      email: 'bob@example.com',
-      password: 'MemberPassword@123',
-      role: 'member',
-      status: 'active',
-      memberId: 'LIB-MEM-1002',
-      phone: '+1-555-0103',
-      address: '221B Baker Street',
-      borrowingLimit: 5
-    });
 
     console.log('[Seed] Creating demo books & copies...');
     const demoBooks = [

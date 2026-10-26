@@ -50,6 +50,15 @@ const runDevWithMemoryDB = async () => {
       memberId: 'LIB-MEM-1001'
     });
 
+    const studentUser = await User.create({
+      name: 'Student Demo User',
+      email: 'student@library.com',
+      password: 'StudentPassword@123',
+      role: 'member',
+      status: 'active',
+      memberId: 'LIB-STU-1001'
+    });
+
     const member2 = await User.create({
       name: 'Bob Smith',
       email: 'bob@example.com',

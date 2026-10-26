@@ -8,12 +8,14 @@ const Reservation = require('../models/Reservation');
 const Fine = require('../models/Fine');
 const AuditLog = require('../models/AuditLog');
 
-const seedData = async () => {
+const seedData = async (isStandalone = true) => {
   console.log('--- [DEMO SEED DATA GENERATOR] ---');
   console.log('Notice: This script loads standard demo seed records for evaluation and demonstration purposes.');
 
   try {
-    await connectDB();
+    if (mongoose.connection.readyState === 0) {
+      await connectDB();
+    }
 
     console.log('[Seed] Clearing existing collections...');
     await Promise.all([
@@ -57,7 +59,29 @@ const seedData = async () => {
       borrowingLimit: 5
     });
 
+    const studentUser = await User.create({
+      name: 'Student Demo User',
+      email: 'student@library.com',
+      password: 'StudentPassword@123',
+      role: 'member',
+      status: 'active',
+      memberId: 'LIB-STU-1001',
+      phone: '+1-555-0104',
+      address: 'Campus Dorm Room 302',
+      borrowingLimit: 5
+    });
+
     const member2 = await User.create({
+      name: 'Bob Smith',
+      email: 'bob@example.com',
+      password: 'MemberPassword@123',
+      role: 'member',
+      status: 'active',
+      memberId: 'LIB-MEM-1002',
+      phone: '+1-555-0103',
+      address: '221B Baker Street',
+      borrowingLimit: 5
+    });
       name: 'Bob Smith',
       email: 'bob@example.com',
       password: 'MemberPassword@123',
@@ -220,17 +244,22 @@ const seedData = async () => {
     console.log('[Seed] Demo data seeding completed successfully!');
     console.log('----------------------------------------------------');
     console.log('Demo Credentials:');
-    console.log('  Administrator: admin@library.com     | Password: AdminPassword@123');
-    console.log('  Librarian:     librarian@library.com | Password: LibrarianPassword@123');
-    console.log('  Member 1:      alice@example.com     | Password: MemberPassword@123');
-    console.log('  Member 2:      bob@example.com       | Password: MemberPassword@123');
+    console.log('  Administrator: admin@library.com     | Password: AdminPassword@123 (or Admin@123)');
+    console.log('  Librarian:     librarian@library.com | Password: LibrarianPassword@123 (or Librarian@123)');
+    console.log('  Student:       student@library.com   | Password: StudentPassword@123 (or Student@123)');
+    console.log('  Member (Alice): alice@example.com    | Password: MemberPassword@123');
     console.log('----------------------------------------------------');
 
-    await mongoose.disconnect();
-    process.exit(0);
+    if (isStandalone) {
+      await mongoose.disconnect();
+      process.exit(0);
+    }
   } catch (err) {
     console.error('[Seed Error] Failed to seed database:', err);
-    process.exit(1);
+    if (isStandalone) {
+      process.exit(1);
+    }
+    throw err;
   }
 };
 

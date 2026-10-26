@@ -170,22 +170,28 @@ const Login = () => {
                 onClick={() => quickFill('admin@library.com', 'AdminPassword@123')}
                 className="p-2 rounded-lg bg-slate-100 hover:bg-purple-50 hover:text-purple-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
-                👑 Admin
+                <div>👑 Admin</div>
+                <div className="text-[10px] text-slate-400 font-normal truncate">admin@library.com</div>
               </button>
               <button
                 type="button"
                 onClick={() => quickFill('librarian@library.com', 'LibrarianPassword@123')}
                 className="p-2 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
-                📚 Librarian
+                <div>📚 Librarian</div>
+                <div className="text-[10px] text-slate-400 font-normal truncate">librarian@library.com</div>
               </button>
               <button
                 type="button"
-                onClick={() => quickFill('alice@example.com', 'MemberPassword@123')}
+                onClick={() => quickFill('student@library.com', 'StudentPassword@123')}
                 className="p-2 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
-                🎓 Student
+                <div>🎓 Student</div>
+                <div className="text-[10px] text-slate-400 font-normal truncate">student@library.com</div>
               </button>
+            </div>
+            <div className="mt-2 text-[11px] text-center text-slate-400">
+              Demo passwords: <span className="font-mono text-slate-600">AdminPassword@123</span> / <span className="font-mono text-slate-600">StudentPassword@123</span> (or <span className="font-mono text-slate-600">Admin@123</span> / <span className="font-mono text-slate-600">Student@123</span>)
             </div>
           </div>
         </div>

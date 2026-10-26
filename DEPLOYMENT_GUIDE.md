@@ -33,7 +33,7 @@ This guide shows you step-by-step how to deploy your Library Book Management Sys
    - **Runtime:** `Node`
    - **Build Command:**
      ```bash
-     npm run install:all && npm run build
+     npm run build
      ```
    - **Start Command:**
      ```bash

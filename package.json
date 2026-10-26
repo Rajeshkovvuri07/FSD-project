@@ -9,13 +9,13 @@
   ],
   "scripts": {
     "setup": "npm run install:all",
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "install:all": "npm install --include=dev && cd backend && npm install && cd ../frontend && npm install --include=dev",
     "start": "cd backend && npm start",
     "dev": "cd backend && npm run dev:memory",
     "dev:backend": "cd backend && npm run dev",
     "dev:memory": "cd backend && npm run dev:memory",
     "dev:frontend": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build",
+    "build": "cd backend && npm install && cd ../frontend && npm install --include=dev && npm run build",
     "test": "cd backend && npm test",
     "seed": "cd backend && npm run seed"
   },

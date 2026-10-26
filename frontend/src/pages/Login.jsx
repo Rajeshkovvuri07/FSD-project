@@ -77,7 +77,7 @@ const Login = () => {
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              Register Member
+              Register Student
             </button>
           </div>
 
@@ -154,7 +154,7 @@ const Login = () => {
               className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-semibold text-sm rounded-lg shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center gap-2 mt-2"
             >
               {loading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-              {isRegister ? 'Create Member Account' : 'Sign In'}
+              {isRegister ? 'Create Student Account' : 'Sign In'}
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -164,34 +164,27 @@ const Login = () => {
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">
               Auditor Demo Quick-Fill
             </span>
-            <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-3 gap-2 text-xs">
               <button
                 type="button"
                 onClick={() => quickFill('admin@library.com', 'AdminPassword@123')}
-                className="p-2 rounded-lg bg-slate-100 hover:bg-purple-50 hover:text-purple-700 text-slate-700 font-medium text-left border border-slate-200 transition-colors"
+                className="p-2 rounded-lg bg-slate-100 hover:bg-purple-50 hover:text-purple-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
-                👑 Administrator
+                👑 Admin
               </button>
               <button
                 type="button"
                 onClick={() => quickFill('librarian@library.com', 'LibrarianPassword@123')}
-                className="p-2 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-medium text-left border border-slate-200 transition-colors"
+                className="p-2 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
                 📚 Librarian
               </button>
               <button
                 type="button"
                 onClick={() => quickFill('alice@example.com', 'MemberPassword@123')}
-                className="p-2 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-medium text-left border border-slate-200 transition-colors"
+                className="p-2 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
-                👤 Member 1 (Alice)
-              </button>
-              <button
-                type="button"
-                onClick={() => quickFill('bob@example.com', 'MemberPassword@123')}
-                className="p-2 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-medium text-left border border-slate-200 transition-colors"
-              >
-                👤 Member 2 (Bob)
+                🎓 Student
               </button>
             </div>
           </div>

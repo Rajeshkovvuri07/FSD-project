@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: athena-library-management
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm run install:all && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 24h
+      - key: BORROW_PERIOD_DAYS
+        value: 14
+      - key: FINE_RATE_PER_DAY
+        value: 1.00
+      - key: MAX_FINE_AMOUNT
+        value: 50.00
+      - key: MAX_RENEWALS
+        value: 2
+      - key: DEFAULT_MEMBER_BORROWING_LIMIT
+        value: 5
+      - key: MONGODB_URI
+        sync: false

@@ -27,7 +27,7 @@ const Login = () => {
         if (!email || !password) {
           throw new Error('Please enter both email and password');
         }
-        await login(email, password);
+        await login(email.trim(), password.trim());
       }
     } catch (err) {
       setError(err.message || 'Authentication failed. Please verify credentials.');
@@ -167,7 +167,7 @@ const Login = () => {
             <div className="grid grid-cols-3 gap-2 text-xs">
               <button
                 type="button"
-                onClick={() => quickFill('admin@library.com', 'AdminPassword@123')}
+                onClick={() => quickFill('admin@library.com', 'Admin@123')}
                 className="p-2 rounded-lg bg-slate-100 hover:bg-purple-50 hover:text-purple-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
                 <div>👑 Admin</div>
@@ -175,7 +175,7 @@ const Login = () => {
               </button>
               <button
                 type="button"
-                onClick={() => quickFill('librarian@library.com', 'LibrarianPassword@123')}
+                onClick={() => quickFill('librarian@library.com', 'Librarian@123')}
                 className="p-2 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
                 <div>📚 Librarian</div>
@@ -183,7 +183,7 @@ const Login = () => {
               </button>
               <button
                 type="button"
-                onClick={() => quickFill('student@library.com', 'StudentPassword@123')}
+                onClick={() => quickFill('student@library.com', 'Student@123')}
                 className="p-2 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-medium text-center border border-slate-200 transition-colors"
               >
                 <div>🎓 Student</div>
@@ -191,7 +191,34 @@ const Login = () => {
               </button>
             </div>
             <div className="mt-2 text-[11px] text-center text-slate-400">
-              Demo passwords: <span className="font-mono text-slate-600">AdminPassword@123</span> / <span className="font-mono text-slate-600">StudentPassword@123</span> (or <span className="font-mono text-slate-600">Admin@123</span> / <span className="font-mono text-slate-600">Student@123</span>)
+              Demo passwords: <span className="font-mono text-slate-600">Admin@123</span> / <span className="font-mono text-slate-600">Student@123</span> (or <span className="font-mono text-slate-600">AdminPassword@123</span>)
+            </div>
+
+            <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+              <span>Cloud Database empty?</span>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    setError('');
+                    setLoading(true);
+                    const res = await fetch('/api/auth/seed');
+                    const data = await res.json();
+                    if (data.success) {
+                      alert('Demo database populated successfully! Now click any quick-fill button above to sign in.');
+                    } else {
+                      setError(data.message || 'Failed to seed database');
+                    }
+                  } catch (e) {
+                    setError('Failed to reach seeding API. Please verify server status.');
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                className="text-emerald-600 hover:text-emerald-700 hover:underline font-semibold"
+              >
+                ⚡ Populate Demo Records
+              </button>
             </div>
           </div>
         </div>

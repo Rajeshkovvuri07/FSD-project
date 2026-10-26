@@ -6,11 +6,12 @@ const startServer = async () => {
   try {
     await connectDB();
 
-    // Auto-seed initial catalog and user accounts if the database is empty (e.g. fresh Render/Atlas deploy)
+    // Auto-seed initial catalog and user accounts if database is empty or missing core admin
     const User = require('./models/User');
+    const adminExists = await User.findOne({ email: 'admin@library.com' });
     const userCount = await User.countDocuments();
-    if (userCount === 0) {
-      console.log('[Server] Database is empty. Auto-seeding initial administrative and student demo accounts...');
+    if (userCount === 0 || !adminExists) {
+      console.log('[Server] Database needs initialization. Auto-seeding initial administrative and student demo accounts...');
       const seedData = require('./seeds/seedData');
       await seedData(false);
       console.log('[Server] Initial database seed successfully completed.');

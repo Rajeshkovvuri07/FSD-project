@@ -79,25 +79,79 @@ const login = async (req, res, next) => {
       });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
+    let lookupEmail = (email || '').trim().toLowerCase();
+    if (lookupEmail === 'admin') lookupEmail = 'admin@library.com';
+    if (lookupEmail === 'librarian') lookupEmail = 'librarian@library.com';
+    if (lookupEmail === 'student') lookupEmail = 'student@library.com';
+
+    let user = await User.findOne({ email: lookupEmail }).select('+password');
+
+    // Self-healing: If demo user requested doesn't exist yet, auto-create it immediately on-the-fly
+    if (!user) {
+      if (lookupEmail === 'admin@library.com') {
+        user = await User.create({
+          name: 'System Administrator',
+          email: 'admin@library.com',
+          password: 'AdminPassword@123',
+          role: 'admin',
+          status: 'active'
+        });
+      } else if (lookupEmail === 'librarian@library.com') {
+        user = await User.create({
+          name: 'Sarah Librarian',
+          email: 'librarian@library.com',
+          password: 'LibrarianPassword@123',
+          role: 'librarian',
+          status: 'active'
+        });
+      } else if (lookupEmail === 'student@library.com' || lookupEmail === 'alice@example.com') {
+        user = await User.create({
+          name: 'Student Demo User',
+          email: 'student@library.com',
+          password: 'StudentPassword@123',
+          role: 'member',
+          status: 'active',
+          memberId: 'LIB-STU-1001'
+        });
+      }
+    }
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password'
+        message: 'No account found with this email. Please click one of the Demo Quick-Fill buttons (Admin, Librarian, Student) or register a new student account.'
       });
     }
 
-    let isMatch = await user.comparePassword(password);
+    const cleanPass = (password || '').trim();
+    let isMatch = await user.comparePassword(cleanPass);
     if (!isMatch) {
       // Support common shorthand formats for default demo accounts
-      const lowerEmail = email.toLowerCase().trim();
-      const isDemoAdmin = lowerEmail === 'admin@library.com' && (password === 'AdminPassword@123' || password === 'Admin@123' || password === 'admin123' || password === 'admin');
-      const isDemoLibrarian = lowerEmail === 'librarian@library.com' && (password === 'LibrarianPassword@123' || password === 'Librarian@123' || password === 'librarian123' || password === 'librarian');
-      const isDemoStudent = (lowerEmail === 'student@library.com' || lowerEmail === 'alice@example.com' || lowerEmail === 'bob@example.com') &&
-        (password === 'StudentPassword@123' || password === 'Student@123' || password === 'MemberPassword@123' || password === 'Member@123' || password === 'student123' || password === 'Password@123' || password === 'student');
+      const isDemoAdmin = lookupEmail === 'admin@library.com' && (
+        cleanPass === 'AdminPassword@123' ||
+        cleanPass === 'Admin@123' ||
+        cleanPass === 'admin123' ||
+        cleanPass === 'admin'
+      );
+      const isDemoLibrarian = lookupEmail === 'librarian@library.com' && (
+        cleanPass === 'LibrarianPassword@123' ||
+        cleanPass === 'Librarian@123' ||
+        cleanPass === 'librarian123' ||
+        cleanPass === 'librarian'
+      );
+      const isDemoStudent = (lookupEmail === 'student@library.com' || lookupEmail === 'alice@example.com' || lookupEmail === 'bob@example.com') && (
+        cleanPass === 'StudentPassword@123' ||
+        cleanPass === 'Student@123' ||
+        cleanPass === 'MemberPassword@123' ||
+        cleanPass === 'Member@123' ||
+        cleanPass === 'student123' ||
+        cleanPass === 'Password@123' ||
+        cleanPass === 'student'
+      );
 
       if (isDemoAdmin || isDemoLibrarian || isDemoStudent) {
+        user.password = cleanPass;
+        await user.save();
         isMatch = true;
       }
     }
@@ -105,7 +159,7 @@ const login = async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password. Use demo credentials or register a new student account.'
+        message: 'Incorrect password. For demo accounts use Admin@123, Librarian@123, or Student@123.'
       });
     }
 
